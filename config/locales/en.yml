@@ -1,4 +1,4 @@
 # English strings go here for Rails i18n
 en:
-  label_sql: sql
-  field_sql: sql expression
+  label_sql_active: sql_active
+  field_sql_active: sql expression
