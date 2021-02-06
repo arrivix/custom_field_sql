@@ -2,26 +2,23 @@ module CustomFieldSql
   module CustomFields
     module Formats
 
-      class Sql < Redmine::FieldFormat::List
-        add 'sql'
-        field_attributes :sql
-        self.form_partial = 'custom_fields/formats/sql'
+      class Sql_active < Redmine::FieldFormat::List
+        add 'sql_active'
+        field_attributes :sql_active
+        self.form_partial = 'custom_fields/formats/sql_active'
         
-        def target_class
-          @target_class ||= CustomFieldEnumeration
-        end
 
         def possible_values_options(custom_field, object = nil)
-          sql = custom_field.sql
-          if sql
+          sql_active = custom_field.sql_active
+          if sql_active
             if object
               if object.id.nil?
-                sql = sql.gsub('%id%', 'null')
+                sql_active = sql_active.gsub('%id%', 'null')
               else
-                sql = sql.gsub('%id%', object.id.to_s)
+                sql_active = sql_active.gsub('%id%', object.id.to_s)
               end
             end
-            result = ActiveRecord::Base.connection.select_all(sql)
+            result = ActiveRecord::Base.connection.select_all(sql_active)
             result.rows.where("active = 1")
           else
             []
@@ -29,16 +26,16 @@ module CustomFieldSql
         end
         
         def possible_values_records(custom_field, object=nil)
-          sql = custom_field.sql
-          if sql
+          sql_active = custom_field.sql_active
+          if sql_active
             if object
               if object.id.nil?
-                sql = sql.gsub('%id%', 'null')
+                sql_active = sql_active.gsub('%id%', 'null')
               else
-                sql = sql.gsub('%id%', object.id.to_s)
+                sql_active = sql_active.gsub('%id%', object.id.to_s)
               end
             end
-            result = ActiveRecord::Base.connection.select_all(sql)
+            result = ActiveRecord::Base.connection.select_all(sql_active)
             result.rows.where("active = 1")
           else
             []
