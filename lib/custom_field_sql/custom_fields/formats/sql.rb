@@ -6,6 +6,10 @@ module CustomFieldSql
         add 'sql'
         field_attributes :sql
         self.form_partial = 'custom_fields/formats/sql'
+        
+        def target_class
+          @target_class ||= CustomFieldEnumeration
+        end
 
         def possible_values_options(custom_field, object = nil)
           sql = custom_field.sql
@@ -18,7 +22,24 @@ module CustomFieldSql
               end
             end
             result = ActiveRecord::Base.connection.select_all(sql)
-            result.rows
+            result.rows.where("active = 1")
+          else
+            []
+          end
+        end
+        
+        def possible_values_records(custom_field, object=nil)
+          sql = custom_field.sql
+          if sql
+            if object
+              if object.id.nil?
+                sql = sql.gsub('%id%', 'null')
+              else
+                sql = sql.gsub('%id%', object.id.to_s)
+              end
+            end
+            result = ActiveRecord::Base.connection.select_all(sql)
+            result.rows.where("active = 1")
           else
             []
           end
